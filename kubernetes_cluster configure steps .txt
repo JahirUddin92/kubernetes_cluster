@@ -1,0 +1,67 @@
+### Create Kubernetes Cluster through Ansible ###
+
+
+Here we are using one server for manage ansible and configure one server for master node & two for worker node 
+
+
+Server Requirements:
+
+OS : Ubuntu 20.04 lts
+vCPU: 2
+RAM: 2GB
+
+
+Server Pre-Configure:
+
+1. enable root login 
+2. set password for root 
+3. set hostname 
+4. Configure Key Base Authentication (ssh)
+
+<< login server (ansible confihure) >>
+
+1. install ansible 
+   sudo apt update
+   sudo apt install ansible
+2. configure ansible host file
+   sudo vi /etc/ansible/hosts
+   (i have added this file in git )
+   ansible-inventory --list -y   ( verify ansible hosts list)
+   ansible all -m ping           ( check rechability )
+   
+3. clone ansible playbooks from git.
+   git clone git@github.com:JahirUddin92/kubernetes_cluster.git
+   
+4. enter directory > cd  kubernetes_cluster   
+
+5. execute below command for triggering ansible playbook 
+   ansible-playbook prerequisites.yml      (configure prerequisites for prepairing nodes )
+   ansible-playbook dependencies.yml       ( install dependencies for kubernetes )
+   ansible-playbook cluster_Initialize.yml (Initializing master node for cluster )
+   ansible-playbook join_clusters.yml      (this playbook configure worker node for joining cluster )
+   
+** cluster is ready state 
+
+6. for verifying cluster login to master node via ssh and execute below command 
+   
+   kubectl get nodes
+   
+   
+7. we can verify the kubernetes cluster is working fine by deploying nginx service 
+
+   kubectl create deployment nginx --image=nginx       (first create the deployment for nginx)
+
+   kubectl get deployments                             (verify the deployment is runing)
+
+   kubectl create service nodeport nginx --tcp=80:80   (deploy the nginx service)
+
+   kubectl get services                                (verify the running service and get the port status for checking )
+   
+8. browse the worker node ip with service port for checking the service
+   ip:port
+ 
+  
+   
+
+   
+   
