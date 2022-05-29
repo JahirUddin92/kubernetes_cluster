@@ -37,16 +37,13 @@
 
    - name: install kubelet
      apt:
-       name: kubelet
+       name: 
+        - kubelet
+        - kubeadm
        state: present
        update_cache: true
-
-   - name: install kubeadm
-     apt:
-       name: kubeadm
-       state: present
-
-- hosts: control_plane
+       
+- hosts: master
   become: yes
   tasks:
    - name: install kubectl
